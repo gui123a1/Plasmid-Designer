@@ -1,0 +1,118 @@
+# pLVX 慢病毒表达载体
+# 来源: Clontech (Takara)
+
+id: pLVX
+name: pLVX
+source: Takara Bio
+type: lentiviral
+host:
+  - mammalian
+antibiotic:
+  - Amp
+  - Puromycin
+copy_number: medium
+description: "慢病毒表达载体，用于稳定整合和长期表达"
+sequence: ""
+tags: []
+features:
+  - name: CMV_promoter
+    type: promoter
+    start: 1
+    end: 600
+    sequence: ""
+    strand: "+"
+    description: "CMV 强启动子"
+  - name: MCS
+    type: multiple_cloning_site
+    start: 601
+    end: 700
+    sequence: ""
+    strand: "+"
+    description: "多克隆位点"
+  - name: WPRE
+    type: enhancer
+    start: 800
+    end: 1200
+    sequence: ""
+    strand: "+"
+    description: "土拨鼠肝炎病毒转录后调控元件，增强表达"
+  - name: cPPT
+    type: other
+    start: 1300
+    end: 1500
+    sequence: ""
+    strand: "+"
+    description: "中心多嘌呤序列，提高转导效率"
+  - name: psi
+    type: other
+    start: 1600
+    end: 1800
+    sequence: ""
+    strand: "+"
+    description: "病毒包装信号"
+  - name: RRE
+    type: other
+    start: 1900
+    end: 2100
+    sequence: ""
+    strand: "+"
+    description: "Rev 响应元件"
+  - name: PuroR
+    type: resistance
+    start: 2500
+    end: 3200
+    sequence: ""
+    strand: "+"
+    description: "嘌呤霉素抗性基因"
+  - name: ampR
+    type: resistance
+    start: 4000
+    end: 4800
+    sequence: ""
+    strand: "-"
+    description: "氨苄青霉素抗性基因"
+  - name: LTR_5
+    type: other
+    start: 5000
+    end: 5500
+    sequence: ""
+    strand: "+"
+    description: "5' LTR"
+  - name: LTR_3
+    type: other
+    start: 7000
+    end: 7500
+    sequence: ""
+    strand: "+"
+    description: "3' LTR（自失活型）"
+mcs:
+  name: MCS
+  start: 601
+  end: 700
+  frame: 1
+  sites:
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 605
+      overhang: AATT
+      unique: true
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 620
+      overhang: GATC
+      unique: true
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 635
+      overhang: TCGA
+      unique: true
+    - enzyme: NotI
+      sequence: GCGGCCGC
+      position: 650
+      overhang: GGCCGC
+      unique: true
+    - enzyme: AgeI
+      sequence: ACCGGT
+      position: 665
+      overhang: CCGG
+      unique: true

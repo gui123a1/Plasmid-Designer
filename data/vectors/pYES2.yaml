@@ -1,0 +1,96 @@
+# pYES2 酵母表达载体
+# 来源: Invitrogen
+
+id: pYES2
+name: pYES2
+source: Invitrogen
+type: expression
+host:
+  - S.cerevisiae
+antibiotic:
+  - Amp
+copy_number: medium
+description: "酿酒酵母诱导表达载体，含 GAL1 启动子和 URA3 选择标记"
+sequence: ""
+tags: []
+features:
+  - name: GAL1_promoter
+    type: promoter
+    start: 1
+    end: 500
+    sequence: ""
+    strand: "+"
+    description: "半乳糖诱导型启动子"
+  - name: MCS
+    type: multiple_cloning_site
+    start: 501
+    end: 600
+    sequence: ""
+    strand: "+"
+    description: "多克隆位点"
+  - name: CYC1_terminator
+    type: terminator
+    start: 601
+    end: 800
+    sequence: ""
+    strand: "+"
+    description: "CYC1 终止子"
+  - name: URA3
+    type: gene
+    start: 1000
+    end: 2000
+    sequence: ""
+    strand: "+"
+    description: "尿嘧啶合成基因，用于选择标记"
+  - name: ampR
+    type: resistance
+    start: 3000
+    end: 3800
+    sequence: ""
+    strand: "-"
+    description: "氨苄青霉素抗性基因（大肠杆菌筛选）"
+  - name: 2mu_origin
+    type: origin
+    start: 4000
+    end: 5000
+    sequence: ""
+    strand: "+"
+    description: "2μ 质粒复制起点（酵母）"
+  - name: ColE1_origin
+    type: origin
+    start: 5500
+    end: 6000
+    sequence: ""
+    strand: "+"
+    description: "ColE1 复制起点（大肠杆菌）"
+mcs:
+  name: MCS
+  start: 501
+  end: 600
+  frame: 1
+  sites:
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 505
+      overhang: GATC
+      unique: true
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 520
+      overhang: AATT
+      unique: true
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 535
+      overhang: TCGA
+      unique: true
+    - enzyme: HindIII
+      sequence: AAGCTT
+      position: 550
+      overhang: AGCT
+      unique: true
+    - enzyme: KpnI
+      sequence: GGTACC
+      position: 565
+      overhang: GTAC
+      unique: true

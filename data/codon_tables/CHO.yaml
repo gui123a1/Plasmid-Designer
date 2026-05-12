@@ -1,0 +1,134 @@
+# CHO 细胞 (中国仓鼠卵巢细胞) 密码子使用频率表
+# 来源: Kazusa 密码子使用数据库
+
+species: CHO (Chinese Hamster Ovary)
+taxonomy_id: 10029
+
+# 使用仓鼠 (Cricetulus griseus) 的密码子频率
+# 苯丙氨酸 Phe (F)
+TTT: 0.44
+TTC: 0.56
+
+# 亮氨酸 Leu (L)
+TTA: 0.07
+TTG: 0.13
+CTT: 0.13
+CTC: 0.20
+CTA: 0.07
+CTG: 0.40
+
+# 异亮氨酸 Ile (I)
+ATT: 0.35
+ATC: 0.48
+ATA: 0.17
+
+# 甲硫氨酸 Met (M)
+ATG: 1.00
+
+# 缬氨酸 Val (V)
+GTT: 0.11
+GTC: 0.23
+GTA: 0.10
+GTG: 0.56
+
+# 丝氨酸 Ser (S)
+TCT: 0.17
+TCC: 0.23
+TCA: 0.14
+TCG: 0.05
+AGT: 0.15
+AGC: 0.26
+
+# 脯氨酸 Pro (P)
+CCT: 0.27
+CCC: 0.34
+CCA: 0.26
+CCG: 0.13
+
+# 苏氨酸 Thr (T)
+ACT: 0.24
+ACC: 0.37
+ACA: 0.30
+ACG: 0.09
+
+# 丙氨酸 Ala (A)
+GCT: 0.25
+GCC: 0.41
+GCA: 0.23
+GCG: 0.11
+
+# 酪氨酸 Tyr (Y)
+TAT: 0.43
+TAC: 0.57
+
+# 组氨酸 His (H)
+CAT: 0.56
+CAC: 0.44
+
+# 谷氨酰胺 Gln (Q)
+CAA: 0.26
+CAG: 0.74
+
+# 天冬酰胺 Asn (N)
+AAT: 0.46
+AAC: 0.54
+
+# 赖氨酸 Lys (K)
+AAA: 0.41
+AAG: 0.59
+
+# 天冬氨酸 Asp (D)
+GAT: 0.45
+GAC: 0.55
+
+# 谷氨酸 Glu (E)
+GAA: 0.40
+GAG: 0.60
+
+# 半胱氨酸 Cys (C)
+TGT: 0.44
+TGC: 0.56
+
+# 色氨酸 Trp (W)
+TGG: 1.00
+
+# 精氨酸 Arg (R)
+CGT: 0.09
+CGC: 0.19
+CGA: 0.10
+CGG: 0.22
+AGA: 0.20
+AGG: 0.20
+
+# 甘氨酸 Gly (G)
+GGT: 0.16
+GGC: 0.35
+GGA: 0.25
+GGG: 0.24
+
+# 终止密码子
+TAA: 0.62
+TAG: 0.12
+TGA: 0.26
+
+optimal_codons:
+  F: TTC
+  L: CTG
+  I: ATC
+  M: ATG
+  V: GTG
+  S: AGC
+  P: CCC
+  T: ACC
+  A: GCC
+  Y: TAC
+  H: CAC
+  Q: CAG
+  N: AAC
+  K: AAG
+  D: GAC
+  E: GAG
+  C: TGC
+  W: TGG
+  R: CGC
+  G: GGC

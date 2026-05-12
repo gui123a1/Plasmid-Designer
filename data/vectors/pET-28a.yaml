@@ -1,0 +1,124 @@
+# pET-28a(+) 载体定义
+# 来源: Novagen
+
+id: pET-28a
+name: pET-28a(+)
+source: Novagen
+type: expression
+host:
+  - E.coli
+antibiotic:
+  - kanamycin
+copy_number: high
+description: |
+  pET-28a(+) is designed for expression and purification of recombinant proteins in E. coli.
+  Features an N-terminal His-Tag® followed by a thrombin site, T7 promoter and lac operator
+  for expression, and optional C-terminal His-Tag.
+
+tags:
+  - N-His6
+  - C-His6
+  - thrombin_site
+
+features:
+  - name: T7_promoter
+    type: promoter
+    start: 1
+    end: 50
+    sequence: TAATACGACTCACTATAGGGGAATTGTGAGCGGATAACAATTCCCCTCTAGAAATAATTTTGTTTAACTTTA
+    description: T7 RNA polymerase promoter
+
+  - name: His_tag_N
+    type: tag
+    start: 51
+    end: 72
+    sequence: CATCACCATCACCATCAC
+    description: N-terminal 6xHis tag
+
+  - name: thrombin_site
+    type: tag
+    start: 73
+    end: 87
+    sequence: GCTAGCATGACTGGTGGAC
+    description: Thrombin cleavage site
+
+  - name: MCS
+    type: multiple_cloning_site
+    start: 88
+    end: 180
+    sequence: NcoI-BamHI-XhoI-SalI-HindIII
+    description: Multiple cloning site
+
+  - name: T7_terminator
+    type: terminator
+    start: 5300
+    end: 5400
+    sequence: TGCTAGTTATTGCTCAGCGGTGGCAGCAGCCCACTC
+    description: T7 terminator
+
+  - name: lacI
+    type: gene
+    start: 5500
+    end: 6500
+    description: lac repressor
+
+  - name: kanR
+    type: resistance
+    start: 7000
+    end: 7800
+    description: Kanamycin resistance gene
+
+  - name: ori
+    type: origin
+    start: 8000
+    end: 8500
+    description: pBR322 origin of replication
+
+mcs:
+  name: MCS
+  start: 88
+  end: 180
+  frame: 1
+  sites:
+    - enzyme: NcoI
+      sequence: CCATGG
+      position: 88
+      overhang: CATG
+      unique: true
+    
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 105
+      overhang: GATC
+      unique: true
+    
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 125
+      overhang: TCGA
+      unique: true
+    
+    - enzyme: SalI
+      sequence: GTCGAC
+      position: 140
+      overhang: TCGA
+      unique: true
+    
+    - enzyme: HindIII
+      sequence: AAGCTT
+      position: 160
+      overhang: AGCT
+      unique: true
+
+# 克隆建议
+cloning_suggestions:
+  - method: restriction
+    enzymes: [NcoI, XhoI]
+    notes: 经典组合，需要检查插入序列中是否含有这些位点
+  
+  - method: gibson
+    notes: Gibson Assembly，无需考虑内部酶切位点
+  
+  - method: golden_gate
+    enzyme: BsaI
+    notes: Golden Gate，适合高通量构建

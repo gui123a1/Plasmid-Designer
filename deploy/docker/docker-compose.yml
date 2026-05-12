@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  # Backend API service
+  backend:
+    build:
+      context: ../../
+      dockerfile: deploy/docker/Dockerfile.backend
+    container_name: plasmid-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../data:/app/data
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER:-plasmid}:${DB_PASSWORD:-plasmid_secure_2026}@db:5432/plasmid_designer
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=${REDIS_ENABLED:-true}
+      - SECRET_KEY=${SECRET_KEY:-change_this_in_production}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DATA_DIR=/app/data
+      - VECTORS_DIR=/app/data/vectors
+      - CODON_TABLES_DIR=/app/data/codon_tables
+      - STORAGE_MODE=${STORAGE_MODE:-database}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - plasmid-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend web service
+  frontend:
+    build:
+      context: ../../
+      dockerfile: deploy/docker/Dockerfile.frontend
+    container_name: plasmid-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - plasmid-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL database
+  db:
+    image: postgres:15-alpine
+    container_name: plasmid-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-plasmid}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-plasmid_secure_2026}
+      POSTGRES_DB: plasmid_designer
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - plasmid-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-plasmid} -d plasmid_designer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    container_name: plasmid-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - plasmid-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  plasmid-network:
+    driver: bridge

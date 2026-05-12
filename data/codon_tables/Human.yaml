@@ -1,0 +1,134 @@
+# 人源密码子使用频率表
+# 来源: Kazusa 密码子使用数据库
+
+species: Homo sapiens
+taxonomy_id: 9606
+
+# 苯丙氨酸 Phe (F)
+TTT: 0.46
+TTC: 0.54
+
+# 亮氨酸 Leu (L)
+TTA: 0.07
+TTG: 0.13
+CTT: 0.13
+CTC: 0.20
+CTA: 0.07
+CTG: 0.40
+
+# 异亮氨酸 Ile (I)
+ATT: 0.36
+ATC: 0.47
+ATA: 0.17
+
+# 甲硫氨酸 Met (M)
+ATG: 1.00
+
+# 缬氨酸 Val (V)
+GTT: 0.11
+GTC: 0.22
+GTA: 0.11
+GTG: 0.56
+
+# 丝氨酸 Ser (S)
+TCT: 0.18
+TCC: 0.22
+TCA: 0.15
+TCG: 0.05
+AGT: 0.15
+AGC: 0.25
+
+# 脯氨酸 Pro (P)
+CCT: 0.28
+CCC: 0.32
+CCA: 0.27
+CCG: 0.13
+
+# 苏氨酸 Thr (T)
+ACT: 0.25
+ACC: 0.36
+ACA: 0.30
+ACG: 0.09
+
+# 丙氨酸 Ala (A)
+GCT: 0.26
+GCC: 0.40
+GCA: 0.23
+GCG: 0.11
+
+# 酪氨酸 Tyr (Y)
+TAT: 0.44
+TAC: 0.56
+
+# 组氨酸 His (H)
+CAT: 0.57
+CAC: 0.43
+
+# 谷氨酰胺 Gln (Q)
+CAA: 0.27
+CAG: 0.73
+
+# 天冬酰胺 Asn (N)
+AAT: 0.47
+AAC: 0.53
+
+# 赖氨酸 Lys (K)
+AAA: 0.42
+AAG: 0.58
+
+# 天冬氨酸 Asp (D)
+GAT: 0.46
+GAC: 0.54
+
+# 谷氨酸 Glu (E)
+GAA: 0.42
+GAG: 0.58
+
+# 半胱氨酸 Cys (C)
+TGT: 0.46
+TGC: 0.54
+
+# 色氨酸 Trp (W)
+TGG: 1.00
+
+# 精氨酸 Arg (R)
+CGT: 0.08
+CGC: 0.18
+CGA: 0.11
+CGG: 0.21
+AGA: 0.21
+AGG: 0.21
+
+# 甘氨酸 Gly (G)
+GGT: 0.16
+GGC: 0.34
+GGA: 0.25
+GGG: 0.25
+
+# 终止密码子
+TAA: 0.61
+TAG: 0.13
+TGA: 0.26
+
+# 最优密码子
+optimal_codons:
+  F: TTC
+  L: CTG
+  I: ATC
+  M: ATG
+  V: GTG
+  S: AGC
+  P: CCC
+  T: ACC
+  A: GCC
+  Y: TAC
+  H: CAC
+  Q: CAG
+  N: AAC
+  K: AAG
+  D: GAC
+  E: GAG
+  C: TGC
+  W: TGG
+  R: CGC
+  G: GGC

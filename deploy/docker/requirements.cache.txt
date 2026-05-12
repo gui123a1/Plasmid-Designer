@@ -1,0 +1,5 @@
+# Redis 缓存依赖
+# 添加到 requirements.txt
+
+# Redis 客户端
+redis>=5.0.0

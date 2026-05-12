@@ -1,0 +1,92 @@
+# pFastBac1 载体定义
+# 来源: Invitrogen - 杆状病毒表达系统
+
+id: pFastBac1
+name: pFastBac1
+source: Invitrogen
+type: expression
+host:
+  - insect
+antibiotic:
+  - ampicillin
+  - gentamicin
+copy_number: high
+description: |
+  pFastBac1 is a baculovirus expression vector for high-level protein expression
+  in insect cells using the Bac-to-Bac system.
+
+tags:
+  - N-His6
+  - GST
+
+features:
+  - name: polyhedrin_promoter
+    type: promoter
+    start: 1
+    end: 100
+    description: Polyhedrin promoter for strong expression in insect cells
+
+  - name: MCS
+    type: multiple_cloning_site
+    start: 101
+    end: 200
+    description: Multiple cloning site
+
+  - name: SV40_polyA
+    type: terminator
+    start: 201
+    end: 300
+    description: SV40 polyadenylation signal
+
+  - name: gentR
+    type: resistance
+    start: 500
+    end: 1000
+    description: Gentamicin resistance gene
+
+  - name: ampR
+    type: resistance
+    start: 1500
+    end: 2300
+    description: Ampicillin resistance gene
+
+  - name: Tn7L
+    type: other
+    start: 3000
+    end: 3500
+    description: Tn7 transposon left arm
+
+  - name: Tn7R
+    type: other
+    start: 4000
+    end: 4500
+    description: Tn7 transposon right arm
+
+mcs:
+  name: MCS
+  start: 101
+  end: 200
+  frame: 1
+  sites:
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 110
+      overhang: GATC
+      unique: true
+    
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 130
+      overhang: AATT
+      unique: true
+    
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 150
+      overhang: TCGA
+      unique: true
+
+cloning_suggestions:
+  - method: restriction
+    enzymes: [BamHI, XhoI]
+    notes: 杆状病毒表达，需要转座到Bacmid

@@ -1,0 +1,68 @@
+# 常用表达载体模板
+# 来源: Addgene, Invitrogen
+
+id: pUC19
+name: pUC19
+source: common
+type: cloning
+host:
+  - E.coli
+antibiotic:
+  - Amp
+copy_number: high
+description: "通用克隆载体，含多克隆位点和lacZα用于蓝白斑筛选"
+sequence: ""
+tags: []
+features:
+  - name: lacZα
+    type: gene
+    start: 1
+    end: 500
+    sequence: ""
+    strand: "+"
+    description: "β-半乳糖苷酶α片段，用于蓝白斑筛选"
+  - name: ampR
+    type: resistance
+    start: 2500
+    end: 3300
+    sequence: ""
+    strand: "-"
+    description: "氨苄青霉素抗性基因"
+  - name: MCS
+    type: multiple_cloning_site
+    start: 400
+    end: 500
+    sequence: ""
+    strand: "+"
+    description: "多克隆位点"
+mcs:
+  name: MCS
+  start: 400
+  end: 500
+  frame: 1
+  sites:
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 405
+      overhang: AATT
+      unique: true
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 420
+      overhang: GATC
+      unique: true
+    - enzyme: HindIII
+      sequence: AAGCTT
+      position: 435
+      overhang: AGCT
+      unique: true
+    - enzyme: XbaI
+      sequence: TCTAGA
+      position: 450
+      overhang: CTAG
+      unique: true
+    - enzyme: PstI
+      sequence: CTGCAG
+      position: 465
+      overhang: TGCA
+      unique: true

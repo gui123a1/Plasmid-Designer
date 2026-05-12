@@ -1,0 +1,93 @@
+# pGEX-4T-1 载体定义
+# 来源: GE Healthcare
+
+id: pGEX-4T-1
+name: pGEX-4T-1
+source: GE Healthcare
+type: expression
+host:
+  - E.coli
+antibiotic:
+  - ampicillin
+copy_number: high
+description: |
+  pGEX-4T-1 is designed for expression of proteins as fusions with GST (Glutathione S-transferase).
+  The GST tag enables one-step purification using glutathione sepharose. 
+  Includes thrombin cleavage site for tag removal.
+
+tags:
+  - N-GST
+  - thrombin_cleavage_site
+
+features:
+  - name: tac_promoter
+    type: promoter
+    start: 1
+    end: 100
+    description: tac promoter (hybrid trp-lac promoter)
+
+  - name: GST_gene
+    type: gene
+    start: 101
+    end: 800
+    description: Glutathione S-transferase gene
+
+  - name: thrombin_site
+    type: tag
+    start: 801
+    end: 812
+    sequence: LVPRGS
+    description: Thrombin cleavage site
+
+  - name: MCS
+    type: multiple_cloning_site
+    start: 813
+    end: 900
+    description: Multiple cloning site
+
+  - name: ampR
+    type: resistance
+    start: 2000
+    end: 2800
+    description: Ampicillin resistance gene
+
+  - name: ori
+    type: origin
+    start: 3000
+    end: 3500
+    description: pBR322 origin
+
+mcs:
+  name: MCS
+  start: 813
+  end: 900
+  frame: 1
+  sites:
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 813
+      overhang: GATC
+      unique: true
+    
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 830
+      overhang: AATT
+      unique: true
+    
+    - enzyme: SalI
+      sequence: GTCGAC
+      position: 850
+      overhang: TCGA
+      unique: true
+    
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 870
+      overhang: TCGA
+      unique: true
+
+cloning_suggestions:
+  - method: restriction
+    enzymes: [BamHI, XhoI]
+    notes: 常用组合，保持读码框

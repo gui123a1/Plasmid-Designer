@@ -1,0 +1,106 @@
+# pcDNA3.1 载体定义
+# 来源: Invitrogen/Thermo Fisher
+
+id: pcDNA3.1
+name: pcDNA3.1(+)
+source: Invitrogen
+type: expression
+host:
+  - mammalian
+antibiotic:
+  - ampicillin
+  - Geneticin (G418)
+copy_number: high
+description: |
+  pcDNA3.1(+) is a mammalian expression vector designed for high-level expression
+  in a wide range of mammalian cells. Features CMV promoter for strong constitutive
+  expression and neomycin resistance for stable selection.
+
+tags:
+  - V5
+  - 6xHis
+
+features:
+  - name: CMV_promoter
+    type: promoter
+    start: 1
+    end: 600
+    description: Cytomegalovirus immediate early promoter
+
+  - name: MCS
+    type: multiple_cloning_site
+    start: 601
+    end: 750
+    description: Multiple cloning site with various restriction sites
+
+  - name: BGH_polyA
+    type: terminator
+    start: 800
+    end: 1000
+    description: Bovine growth hormone polyadenylation signal
+
+  - name: SV40_promoter
+    type: promoter
+    start: 1500
+    end: 1700
+    description: SV40 promoter for neo expression
+
+  - name: NeoR
+    type: resistance
+    start: 1750
+    end: 2550
+    description: Neomycin/Geneticin resistance gene
+
+  - name: AmpR
+    type: resistance
+    start: 4000
+    end: 4800
+    description: Ampicillin resistance gene
+
+  - name: ori
+    type: origin
+    start: 5000
+    end: 5500
+    description: pUC origin of replication
+
+mcs:
+  name: MCS
+  start: 601
+  end: 750
+  frame: 1
+  sites:
+    - enzyme: HindIII
+      sequence: AAGCTT
+      position: 601
+      overhang: AGCT
+      unique: true
+    
+    - enzyme: BamHI
+      sequence: GGATCC
+      position: 620
+      overhang: GATC
+      unique: true
+    
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 640
+      overhang: AATT
+      unique: true
+    
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 660
+      overhang: TCGA
+      unique: true
+    
+    - enzyme: XbaI
+      sequence: TCTAGA
+      position: 680
+      overhang: CTAG
+      unique: true
+    
+    - enzyme: NotI
+      sequence: GCGGCCGC
+      position: 700
+      overhang: GGCCGC
+      unique: true

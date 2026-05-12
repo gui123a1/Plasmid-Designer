@@ -1,0 +1,228 @@
+# Plasmid Designer v2
+
+自动化质粒构建设计平台 — 源码与部署配置分离版
+
+## 项目结构
+
+```
+plasmid-designer-v2/
+├── src/                        # 纯源代码
+│   ├── backend/                # FastAPI 后端
+│   │   ├── app/                # 应用层
+│   │   │   ├── main.py         # 入口 (~97行，路由挂载)
+│   │   │   ├── config.py       # 配置 + sys.path
+│   │   │   ├── routes/         # 路由模块
+│   │   │   │   ├── design_routes.py   # 设计任务 API
+│   │   │   │   ├── batch_routes.py    # 批量设计 API
+│   │   │   │   ├── vector_routes.py   # 载体库 API
+│   │   │   │   ├── codon_routes.py    # 密码子表 API
+│   │   │   │   └── models.py          # 共享 Pydantic 模型
+│   │   │   ├── storage/        # 双模式存储层
+│   │   │   │   ├── __init__.py        # STORAGE_MODE 工厂
+│   │   │   │   ├── base.py            # 抽象基类
+│   │   │   │   ├── memory_store.py    # 内存实现 (HF)
+│   │   │   │   └── db_store.py        # 数据库实现
+│   │   │   ├── auth/           # JWT 认证 (数据库版)
+│   │   │   ├── database/       # SQLAlchemy 数据模型与 CRUD
+│   │   │   ├── cache_routes.py # 缓存管理 API
+│   │   │   ├── rate_limit_routes.py  # 速率限制 API
+│   │   │   └── analysis_routes.py    # 序列分析 & 导出 API
+│   │   └── core/               # 核心引擎（引物设计、密码子优化等）
+│   └── frontend/               # Vue 3 前端
+│       └── src/
+│           ├── api/            # API 调用层 (44个函数)
+│           ├── stores/         # Pinia 状态管理
+│           │   ├── auth.ts     # 认证 Store
+│           │   ├── design.ts   # 设计 Store
+│           │   └── vectors.ts  # 载体 Store
+│           ├── views/          # 页面组件
+│           ├── components/     # 通用组件
+│           └── types/          # TypeScript 类型
+├── deploy/                     # 部署配置（与源码分离）
+│   ├── hf-docker/              # HuggingFace Spaces 部署
+│   ├── docker/                 # Docker Compose 部署
+│   └── scripts/                # 部署脚本
+├── data/                       # 静态数据
+│   ├── codon_tables/           # 密码子表 (YAML)
+│   └── vectors/                # 载体模板 (YAML)
+├── tests/                      # 测试
+└── docs/                       # 文档
+```
+
+## 快速开始
+
+### 环境要求
+
+- Python 3.11+
+- Node.js 20+
+- npm 10+
+
+### 本地开发
+
+```bash
+# 1. 后端
+cd src/backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+
+# 2. 前端（新开终端）
+cd src/frontend
+npm install
+npm run dev
+```
+
+前端开发服务器启动后访问 http://localhost:5173，Vite 会自动代理 `/api` 请求到后端 8000 端口。
+
+### 存储模式
+
+后端支持两种存储模式，通过环境变量 `STORAGE_MODE` 切换：
+
+| 模式 | 环境变量 | 适用场景 | 说明 |
+|------|----------|----------|------|
+| **database** | `STORAGE_MODE=database` (默认) | Docker/生产部署 | SQLAlchemy + PostgreSQL/SQLite，数据持久化 |
+| **memory** | `STORAGE_MODE=memory` | HuggingFace Spaces | 纯内存 dict，重启丢失，无需数据库 |
+
+```bash
+# 本地开发（默认使用数据库模式，SQLite）
+uvicorn app.main:app --reload
+
+# 内存模式（无需数据库）
+STORAGE_MODE=memory uvicorn app.main:app --reload
+```
+
+### 部署到 HuggingFace Spaces
+
+```bash
+# 只需拷贝 deploy/hf-docker/ 目录 + src/ 目录
+cp -r deploy/hf-docker/* <hf-repo>/
+cp -r src/ <hf-repo>/src/
+```
+
+HF Spaces 使用独立的 `deploy/hf-docker/main.py`（精简版，纯内存存储，无数据库/Redis/认证依赖），自动设置 `STORAGE_MODE=memory`。
+
+### Docker Compose 部署
+
+```bash
+cd deploy/docker
+docker-compose up -d
+```
+
+Docker Compose 默认使用数据库模式，包含：
+- **backend**: FastAPI (端口 8000)
+- **frontend**: Nginx 反向代理 (端口 80)
+- **db**: PostgreSQL 15
+- **redis**: Redis 7 (缓存)
+
+通过 `.env` 文件或环境变量配置：
+```bash
+# docker-compose/.env
+DB_USER=plasmid
+DB_PASSWORD=your_secure_password
+SECRET_KEY=your_jwt_secret_key
+REDIS_ENABLED=true
+STORAGE_MODE=database
+```
+
+## API 概览
+
+启动后端后访问 Swagger 文档: http://localhost:8000/docs
+
+### 设计任务
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| POST | `/api/design` | 创建设计任务（后台异步） |
+| GET | `/api/design/{id}` | 查询设计结果 |
+| GET | `/api/design/{id}/download/genbank` | 下载 GenBank 文件 |
+| GET | `/api/design/{id}/download/primers` | 下载引物订单 (TSV) |
+| GET | `/api/design/{id}/map` | 获取质粒图谱数据 |
+
+### 批量设计
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| POST | `/api/design/batch` | 创建批量设计任务 |
+| GET | `/api/design/batch/{id}` | 查询批量进度 |
+| GET | `/api/design/batch/{id}/download` | 下载批量结果 (ZIP) |
+| GET | `/api/design/batch/{id}/report` | 获取汇总报告 |
+
+### 载体库
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| GET | `/api/vectors` | 列出载体（支持类型/宿主过滤） |
+| GET | `/api/vectors/{id}` | 获取载体详情 |
+| GET | `/api/vectors/{id}/map` | 获取载体图谱数据 |
+| GET | `/api/vectors/{id}/sequence` | 获取载体序列 (FASTA/GenBank) |
+| DELETE | `/api/vectors/{id}` | 删除载体 |
+| PUT | `/api/vectors/{id}` | 更新载体信息 |
+| POST | `/api/vectors/import/ncbi` | 从 NCBI 搜索导入 |
+| POST | `/api/vectors/import/ncbi-id` | 通过 NCBI ID 直接导入 |
+| GET | `/api/vectors/search/ncbi` | 搜索 NCBI（不导入） |
+| GET | `/api/vectors/preview/ncbi/{id}` | 预览 NCBI 载体 |
+| POST | `/api/vectors/import/upload` | 上传载体文件 |
+| POST | `/api/vectors/import/file` | 从本地文件导入 |
+| POST | `/api/vectors/import/batch` | 批量导入 |
+
+### 序列分析 & 导出
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| POST | `/api/analysis/analyze` | 综合序列分析 |
+| POST | `/api/analysis/restriction-sites` | 限制性酶切位点 |
+| POST | `/api/analysis/orfs` | ORF 预测 |
+| POST | `/api/analysis/gc-analysis` | GC 含量分析 |
+| POST | `/api/analysis/compatibility` | 克隆兼容性检查 |
+| GET | `/api/analysis/enzymes` | 酶列表 |
+| GET | `/api/analysis/export/formats` | 导出格式列表 |
+| POST | `/api/analysis/export` | 单格式导出 |
+| POST | `/api/analysis/export/all` | 全格式导出 (ZIP) |
+
+### 认证
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| POST | `/api/auth/register` | 用户注册 |
+| POST | `/api/auth/login` | 用户登录 |
+| POST | `/api/auth/logout` | 用户登出 |
+| GET | `/api/auth/me` | 获取当前用户 |
+| GET | `/api/auth/verify` | 验证令牌 |
+
+### 缓存 & 速率限制
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| GET | `/api/cache/stats` | 缓存统计 |
+| POST | `/api/cache/clear` | 清除缓存 |
+| POST | `/api/cache/invalidate/design/{id}` | 失效设计缓存 |
+| POST | `/api/cache/invalidate/vector/{id}` | 失效载体缓存 |
+| GET | `/api/cache/health` | 缓存健康检查 |
+| GET | `/api/rate-limit/status` | 速率限制状态 |
+| GET | `/api/rate-limit/config` | 速率限制配置 |
+
+## 数据文件
+
+- **密码子表**：E.coli K12, Human, CHO, Yeast
+- **载体模板**：pET-28a, pET-21a, pcDNA3.1, pGEX-4T-1, pGEX-6P-1, pUC19, pYES2, pLVX, pFastBac1
+
+## 运行测试
+
+```bash
+# 后端测试
+cd tests
+pytest
+
+# 前端测试
+cd src/frontend
+npm run test:run
+```
+
+## 技术栈
+
+| 层 | 技术 |
+|----|------|
+| 前端 | Vue 3 + TypeScript + Vite + Pinia + Vue Router |
+| 后端 | FastAPI + Pydantic + SQLAlchemy + Redis |
+| 生物信息 | BioPython + Primer3-py + pydna |
+| 认证 | JWT (PyJWT) + bcrypt (passlib) |
+| 部署 | Docker Compose / HuggingFace Spaces |

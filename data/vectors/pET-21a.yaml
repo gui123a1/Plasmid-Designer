@@ -1,0 +1,97 @@
+# pET-21a(+) 载体定义
+# 来源: Novagen
+
+id: pET-21a
+name: pET-21a(+)
+source: Novagen
+type: expression
+host:
+  - E.coli
+antibiotic:
+  - ampicillin
+copy_number: high
+description: |
+  pET-21a(+) is designed for expression of proteins with C-terminal His-Tag.
+  Features T7 promoter and lac operator for tight regulation of expression.
+
+tags:
+  - C-His6
+
+features:
+  - name: T7_promoter
+    type: promoter
+    start: 1
+    end: 50
+    description: T7 RNA polymerase promoter
+
+  - name: lac_operator
+    type: regulatory
+    start: 51
+    end: 70
+    description: lac operator for IPTG induction
+
+  - name: MCS
+    type: multiple_cloning_site
+    start: 100
+    end: 180
+    description: Multiple cloning site with C-terminal His-tag
+
+  - name: His_tag_C
+    type: tag
+    start: 181
+    end: 200
+    sequence: CATCACCATCACCATCACTAA
+    description: C-terminal 6xHis tag with stop codon
+
+  - name: T7_terminator
+    type: terminator
+    start: 201
+    end: 260
+    description: T7 terminator
+
+  - name: ampR
+    type: resistance
+    start: 1000
+    end: 1800
+    description: Ampicillin resistance gene
+
+  - name: ori
+    type: origin
+    start: 2000
+    end: 2500
+    description: pBR322 origin
+
+mcs:
+  name: MCS
+  start: 100
+  end: 180
+  frame: 1
+  sites:
+    - enzyme: NdeI
+      sequence: CATATG
+      position: 100
+      overhang: CATG
+      unique: true
+    
+    - enzyme: EcoRI
+      sequence: GAATTC
+      position: 120
+      overhang: AATT
+      unique: true
+    
+    - enzyme: XhoI
+      sequence: CTCGAG
+      position: 140
+      overhang: TCGA
+      unique: true
+    
+    - enzyme: HindIII
+      sequence: AAGCTT
+      position: 160
+      overhang: AGCT
+      unique: true
+
+cloning_suggestions:
+  - method: restriction
+    enzymes: [NdeI, XhoI]
+    notes: 保持读码框，C端His-tag融合
